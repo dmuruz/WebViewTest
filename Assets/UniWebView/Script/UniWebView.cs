@@ -230,7 +230,6 @@ public class UniWebView: MonoBehaviour {
 
     [SerializeField]
     private bool useToolbar;
-
         
     [SerializeField]
     private UniWebViewToolbarPosition toolbarPosition;
@@ -391,7 +390,18 @@ public class UniWebView: MonoBehaviour {
             }
         }
 
-        if (backButtonEnabled && Input.GetKeyUp(KeyCode.Escape)) {
+        // Only the new input system is enabled. Related flags: https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/manual/Installation.html#enabling-the-new-input-backends
+        //
+        // The new input system is not handling touchscreen events nicely as the old one. 
+        // The gesture detection hangs out regularly. Wait for an improvement of Unity.
+        // So we choose to use the old one whenever it is available.
+        #if ENABLE_INPUT_SYSTEM && !ENABLE_LEGACY_INPUT_MANAGER
+        var backDetected = backButtonEnabled && UnityEngine.InputSystem.Keyboard.current.escapeKey.wasPressedThisFrame;
+        #else
+        var backDetected = backButtonEnabled && Input.GetKeyUp(KeyCode.Escape);
+        #endif
+
+        if (backDetected) {
             UniWebViewLogger.Instance.Info("Received Back button, handling GoBack or close web view.");
             if (CanGoBack) {
                 GoBack();
@@ -410,6 +420,38 @@ public class UniWebView: MonoBehaviour {
     void OnDisable() {
         if (started) {
             _Hide(useAsync: true);
+        }
+    }
+
+    /// <summary>
+    /// Whether the web view is supported in current runtime or not.
+    /// 
+    /// On some certain Android customized builds, the manufacturer prefers not containing the web view package in the 
+    /// system or blocks the web view package from being installed. If this happens, using of any web view related APIs will
+    /// throw a `MissingWebViewPackageException` exception.
+    /// 
+    /// Use this method to check whether the web view is available on the current running system. If this parameter returns `false`, 
+    /// you should not use the web view.
+    /// 
+    /// This property always returns `true` on other supported platforms, such as iOS or macOS editor. It only performs 
+    /// runtime checking on Android. On other not supported platforms such as Windows or Linux, it always returns `false`.
+    /// </summary>
+    /// <value>Returns `true` if web view is supported on the current platform. Otherwise, `false`.</value>
+    public static bool IsWebViewSupported {
+        get {
+            #if UNITY_EDITOR_OSX
+            return true;
+            #elif UNITY_EDITOR
+            return false;
+            #elif UNITY_IOS
+            return true;
+            #elif UNITY_STANDALONE_OSX
+            return true;
+            #elif UNITY_ANDROID
+            return UniWebViewInterface.IsWebViewSupported();
+            #else
+            return false; 
+            #endif
         }
     }
 
@@ -517,7 +559,7 @@ public class UniWebView: MonoBehaviour {
         return _Show(fade, edge, duration, false, completionHandler);
     }
 
-    private bool _Show(bool fade = false, UniWebViewTransitionEdge edge = UniWebViewTransitionEdge.None, 
+    public bool _Show(bool fade = false, UniWebViewTransitionEdge edge = UniWebViewTransitionEdge.None, 
                 float duration = 0.4f, bool useAsync = false, Action completionHandler = null) 
     {
         var identifier = Guid.NewGuid().ToString();
@@ -1339,6 +1381,12 @@ public class UniWebView: MonoBehaviour {
         UniWebViewInterface.SetCalloutEnabled(listener.Name, enabled);
     }
 
+
+    [ObsoleteAttribute("Deprecated. Use `SetSupportMultipleWindows(bool enabled, bool allowJavaScriptOpen)` to set `allowJavaScriptOpen` explicitly.")]
+    public void SetSupportMultipleWindows(bool enabled) {
+        SetSupportMultipleWindows(enabled, true);
+    }
+
     /// <summary>
     /// Sets whether the web view should support a pop up web view triggered by user in a new tab.
     /// 
@@ -1348,17 +1396,25 @@ public class UniWebView: MonoBehaviour {
     /// the page in the same web view if that kind of link is pressed.
     /// 
     /// It works for most cases, but if this is a problem to your app logic, you can change this behavior by calling 
-    /// this method with `true`. It enables the "opening in new tab" behavior in a limited way, by adding the new tab 
-    /// web view above to the current web view, with the same size and position. When the opened new tab is closed, 
-    /// it will be removed from the view hierarchy automatically.
+    /// this method with `enabled` set to `true`. It enables the "opening in new tab" behavior in a limited way, by 
+    /// adding the new tab web view above to the current web view, with the same size and position. When the opened new 
+    /// tab is closed, it will be removed from the view hierarchy automatically.
+    /// 
+    /// By default, only user triggered action is allowed to open a new window for security reason. That means, if you 
+    /// are using some JavaScript like `window.open`, unless you set `allowJavaScriptOpening` to `true`, it won't work. 
+    /// This default behavior prevents any other third party JavaScript code from opening a window arbitrarily.
     /// 
     /// </summary>
     /// <param name="enabled">
     /// Whether to support multiple windows. If `true`, the `target="_blank"` link will be opened in a new web view.
     /// Default is `false`.
     /// </param>
-    public void SetSupportMultipleWindows(bool enabled) {
-        UniWebViewInterface.SetSupportMultipleWindows(listener.Name, enabled);
+    /// <param name="allowJavaScriptOpening">
+    /// Whether to support open the new window with JavaScript by `window.open`. Setting this to `true` means any JavaScript
+    /// code, even from third party (in an iframe or a library on the page), can open a new window. Use it as your risk.
+    /// </param>
+    public void SetSupportMultipleWindows(bool enabled, bool allowJavaScriptOpening) {
+        UniWebViewInterface.SetSupportMultipleWindows(listener.Name, enabled, allowJavaScriptOpening);
     }
 
     /// <summary>

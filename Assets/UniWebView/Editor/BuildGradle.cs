@@ -69,6 +69,7 @@ public class UniWebViewGradleConfig
                 case '{':
                     {
                         if (inDoubleQuote || inSingleQuote) {
+                            str.Append(c);
                             break;
                         }
                         var n = FormatStr(str);
@@ -84,6 +85,7 @@ public class UniWebViewGradleConfig
                 case '}':
                     {
                         if (inDoubleQuote || inSingleQuote) {
+                            str.Append(c);
                             break;
                         }
                         var strf = FormatStr(str);

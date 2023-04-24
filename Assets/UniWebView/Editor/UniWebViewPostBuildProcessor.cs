@@ -45,7 +45,7 @@ class UniWebViewPostBuildProcessor : IPostGenerateGradleAndroidProject
         var config = new UniWebViewGradleConfig(gradleFilePath);
 
         var kotlinPrefix = "implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:";
-        var kotlinVersion = "1.4.31'";
+        var kotlinVersion = "1.6.20'";
 
         var browserPrefix = "implementation 'androidx.browser:browser:";
         var browserVersion = "1.2.0'";

@@ -570,10 +570,10 @@ public class UniWebViewInterface {
     }
 
     [DllImport(DllLib)]
-    private static extern void uv_setSupportMultipleWindows(string name, bool flag);
-    public static void SetSupportMultipleWindows(string name, bool flag) {
+    private static extern void uv_setSupportMultipleWindows(string name, bool enabled, bool allowJavaScriptOpening);
+    public static void SetSupportMultipleWindows(string name, bool enabled, bool allowJavaScriptOpening) {
         CheckPlatform();
-        uv_setSupportMultipleWindows(name, flag);
+        uv_setSupportMultipleWindows(name, enabled, allowJavaScriptOpening);
     }
 
     [DllImport(DllLib)]

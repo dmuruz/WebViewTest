@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "1013876166585",
-    "project_id": "webviewtest-33877",
-    "storage_bucket": "webviewtest-33877.appspot.com"
+    "project_number": "382335563307",
+    "project_id": "memud-cf6b9",
+    "storage_bucket": "memud-cf6b9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1013876166585:android:343cf2136c931c7c0e3068",
+        "mobilesdk_app_id": "1:382335563307:android:f38448f171ff0dfdc39c6e",
         "android_client_info": {
-          "package_name": "com.DefaultCompany.WebViewTest"
+          "package_name": "loodanemels.app"
         }
       },
       "oauth_client": [
         {
-          "client_id": "1013876166585-9ln67iu7cgggrk64oc2id6aibpbtkg8b.apps.googleusercontent.com",
+          "client_id": "382335563307-kvn843g5gs5mh9gsd543m433tuijho1h.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyChCfE9HS7u9BQnBDYArUcnVNH2xJy4Xwo"
+          "current_key": "AIzaSyDnkFkdup7bnHsC88-V81bTzS0gOy7WtDU"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "1013876166585-9ln67iu7cgggrk64oc2id6aibpbtkg8b.apps.googleusercontent.com",
+              "client_id": "382335563307-kvn843g5gs5mh9gsd543m433tuijho1h.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

@@ -1,5 +1,6 @@
 {
     "name": "UniWebView-CSharp",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

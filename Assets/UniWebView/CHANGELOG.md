@@ -1,5 +1,43 @@
 # Release Note
 
+### 4.12.1 (24 Jun, 2022)
+
+#### Fix
+
+* An issue that a stored cookie cannot be read when using `GetCookie` method on iOS if its domain starting with a dot. According to RFC6265, the leading dot should be ignored when matching a cookie.
+
+### 4.12.0 (17 Jun, 2022)
+
+#### Add
+
+* An `allowJavaScriptOpening` parameter in `SetSupportMultipleWindows` to allow the web view opens a new window even triggered by JavaScript instead of user action.
+
+#### Fix
+
+* An issue which prevents "uploading from camera" from working properly on some Android 11 and Android 12 devices.
+* an issue which causes getting JavaScript evaluating result on the pages with UTF code format (a.k.a, characters as `\uXXXX`) will fail on Android.
+* Now UniWebView 4 supports from Unity 2019.4. This is a requirement of Unity publisher submission guidelines. If you need to continue using UniWebView 4.12.0 and later versions, please consider to upgrade your Unity version.
+
+### 4.11.2 (6 Apr, 2022)
+
+#### Fix
+
+* An issue that Safe Browsing on iOS will leak its memory when using `Dismiss` to close the web page by code.
+
+### 4.11.1 (23 Feb, 2022)
+
+#### Fix
+
+* Now UniWebView can build with Unity's new Input System enabled. But due to a bug in Unity's Input System, the back button detection on some Android devices may break and cause a stuck state. Before Unity can fix that, it is strongly recommended to use the "Both" option for Input System to get a stable experience.
+* An issue that when header is set, the HTML content in iframe tag not shows properly in some cases.
+* Fix a problem that the Post Build script edits format of some embedded variables in gradle file incorrectly.
+
+### 4.11.0 (26 Jan, 2022)
+
+#### Add
+
+* An `IsWebViewSupported` property on `UniWebView` to check whether the current device supports web view.
+
 ### 4.10.3 (3 Dec, 2021)
 
 #### Fix

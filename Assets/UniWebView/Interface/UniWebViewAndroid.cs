@@ -19,6 +19,11 @@ public class UniWebViewInterface {
         plugin.CallStatic("setLogLevel", level); 
     }
 
+    public static bool IsWebViewSupported() {
+        CheckPlatform();
+        return plugin.CallStatic<bool>("isWebViewSupported");
+    }
+
     public static void Init(string name, int x, int y, int width, int height) {
         CheckPlatform();
         plugin.CallStatic("init", name, x, y, width, height);
@@ -343,9 +348,9 @@ public class UniWebViewInterface {
         plugin.CallStatic("setCalloutEnabled", name, flag);
     }
 
-    public static void SetSupportMultipleWindows(string name, bool flag) {
+    public static void SetSupportMultipleWindows(string name, bool enabled, bool allowJavaScriptOpening) {
         CheckPlatform();
-        plugin.CallStatic("setSupportMultipleWindows", name, flag);
+        plugin.CallStatic("setSupportMultipleWindows", name, enabled, allowJavaScriptOpening);
     }
 
     public static void SetDefaultFontSize(string name, int size) {

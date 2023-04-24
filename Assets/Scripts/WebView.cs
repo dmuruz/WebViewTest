@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class WebView : MonoBehaviour
@@ -6,12 +5,11 @@ public class WebView : MonoBehaviour
     [SerializeField] private GameObject inrernetConnectionWindow;
     [SerializeField] private GameObject serviceWindow;
     [SerializeField] private UniWebView webView;
-
+    private string url = "";
     private bool isStarted = false;
 
-    public void ChooseMode()
+    public void Start()
     {
-        string url = "";
         if (PlayerPrefs.HasKey("url"))
         {
             url = PlayerPrefs.GetString("url", "");
@@ -22,6 +20,7 @@ public class WebView : MonoBehaviour
         {
             if (!hasInternetConnection)
             {
+
                 ShowInternetWindow();
             }
             else
@@ -35,42 +34,53 @@ public class WebView : MonoBehaviour
             {
                 ShowInternetWindow();
             }
-            try
-            {
-                url = FirebaseRemoteConfigManager.Instance.GetUrl();
-                Debug.Log(url);
-            }
-            catch
-            {
-                ShowInternetWindow();
-            }
-            if (SystemInfo.deviceModel.ToLower().Contains("google") ||
-                SystemInfo.deviceName.ToLower().Contains("google") || url == "")
-            {
-                OpenService();
-            }
             else
             {
-                PlayerPrefs.SetString("url", url);
-                PlayerPrefs.Save();
-                OpenWebView(url);
+                try
+                {
+                    FirebaseRemoteConfigManager.Instance.FetchDataAsync();
+                }
+                catch
+                {
+                    ShowInternetWindow();
+                }
             }
+        }
+    }
+
+    private void SetUrl()
+    {
+        url = FirebaseRemoteConfigManager.Instance.GetUrl();
+        if (SystemInfo.deviceModel.ToLower().Contains("google") ||
+                SystemInfo.deviceName.ToLower().Contains("google") || url == "")
+        {
+            OpenService();
+        }
+        else
+        {
+            PlayerPrefs.SetString("url", url);
+            PlayerPrefs.Save();
+            OpenWebView(url);
         }
     }
     private void Update()
     {
         if (!isStarted && FirebaseRemoteConfigManager.Instance.isFetched)
         {
-            ChooseMode();
+            SetUrl();
             isStarted = true;
         }
         webView.OnOrientationChanged += (view, orientation) =>
         {
             webView.Frame = new Rect(0, 0, Screen.width, Screen.height);
         };
+        webView.OnShouldClose += (view) =>
+        {
+            return false;
+        };
     }
 
-    private void ShowInternetWindow()
+    public void ShowInternetWindow()
     {
         inrernetConnectionWindow.SetActive(true);
     }

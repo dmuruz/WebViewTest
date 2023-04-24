@@ -70,7 +70,7 @@ public class UniWebViewInterface {
     public static void Print(string name) { CheckPlatform(); }
     public static void CaptureSnapshot(string name, string filename) { CheckPlatform(); }
     public static void SetCalloutEnabled(string name, bool flag) { CheckPlatform(); }
-    public static void SetSupportMultipleWindows(string name, bool flag) { CheckPlatform(); }
+    public static void SetSupportMultipleWindows(string name, bool enabled, bool allowJavaScriptOpening) { CheckPlatform(); }
     public static void SetDragInteractionEnabled(string name, bool flag) { CheckPlatform(); }
     public static void ScrollTo(string name, int x, int y, bool animated) { CheckPlatform(); }
     public static float NativeScreenWidth() { CheckPlatform(); return 0.0f; }
