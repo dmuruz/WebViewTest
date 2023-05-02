@@ -48,6 +48,11 @@ public class WebView : MonoBehaviour
         }
     }
 
+    void OnRectTransformDimensionsChange()
+    {
+        webView.UpdateFrame();
+    }
+
     private void SetUrl()
     {
         url = FirebaseRemoteConfigManager.Instance.GetUrl();
@@ -70,10 +75,13 @@ public class WebView : MonoBehaviour
             SetUrl();
             isStarted = true;
         }
+        
         webView.OnOrientationChanged += (view, orientation) =>
         {
             webView.Frame = new Rect(0, 0, Screen.width, Screen.height);
+            webView.UpdateFrame();
         };
+
         webView.OnShouldClose += (view) =>
         {
             return false;

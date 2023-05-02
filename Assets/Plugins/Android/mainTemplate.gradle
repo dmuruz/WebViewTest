@@ -50,8 +50,8 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion **MINSDKVERSION**
-        targetSdkVersion **TARGETSDKVERSION**
+        minSdkVersion 21
+        targetSdkVersion 33
         ndk {
             abiFilters **ABIFILTERS**
         }

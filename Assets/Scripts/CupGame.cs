@@ -40,7 +40,7 @@ public class CupGame : MonoBehaviour
     }
     private void Start()
     {
-        resultText.text = "";
+        resultText.text = "Catch the right ball!";
         for (int i = 0; i < cups.Length; i++)
         {
             int copy = i;
@@ -77,7 +77,7 @@ public class CupGame : MonoBehaviour
         {
             if (cupIndex == hiddenCupIndex)
             {
-                resultText.text = "Congratulations! You found the hidden object!";
+                resultText.text = "Congratulations! You caught the right ball";
                 score++;
                 scoreText.text = score.ToString();
             }
